@@ -114,6 +114,10 @@ async function getTodo(name) {
   const todo = await service.get(name);
 
   console.log(todo);
+// this is how the messages service is registered
+// We provide a path, which in the case of a REST api would be a URL, and then
+// instantiate the service
+app.use('messages', new Messages());
 }
 
 getTodo('dishes');
