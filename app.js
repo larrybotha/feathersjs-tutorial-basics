@@ -118,6 +118,34 @@ async function getTodo(name) {
 // We provide a path, which in the case of a REST api would be a URL, and then
 // instantiate the service
 app.use('messages', new Messages());
+
+// The service is now available to be used. To do so, we need to get the service
+// from the app:
+async function processMessages() {
+  const messagesSvc = app.service('messages');
+
+  // When a service is registered it automatically becomes a Node EventEmitter
+  // Events are sent whenever a method that modifies data is returned, i.e.
+  // create()
+  // update()
+  // patch()
+  // remove()
+
+  // Events can be listened to as follows:
+  // myService.on('created', data => {})
+  // This is the key to how Feathers implements real-time functionality
+  messagesSvc.on('created', msg => console.log('created', msg));
+  messagesSvc.on('removed', msg => console.log('removed', msg));
+
+  await messagesSvc.create({text: 'First message'});
+  const lastMessage = await messagesSvc.create({text: 'Second message'});
+
+  // delete the most recent message we created
+  await messagesSvc.remove(lastMessage.id);
+
+  const messageList = await messagesSvc.find();
+
+  console.log('available messages', messageList);
 }
 
-getTodo('dishes');
+processMessages();
