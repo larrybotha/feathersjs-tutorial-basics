@@ -53,6 +53,22 @@ const app = feathers();
 
 app.use('messages', new Messages());
 
+// application hooks run for every service
+// They are useful for logging
+// application hooks run in a specific order:
+// before - before all service before hooks
+// after - after all service after hooks
+// error - after all service error hooks
+
+app.hooks({
+  error: async context => {
+    console.error(
+      `Error in ${context.path} service method ${context.method}`,
+      context.error.stack
+    );
+  },
+});
+
 async function processMessages() {
   const messagesSvc = app.service('messages');
 
