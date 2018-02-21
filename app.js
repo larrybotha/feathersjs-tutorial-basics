@@ -1,4 +1,5 @@
 const feathers = require('@feathersjs/feathers');
+const messageHooks = require('./messages.hooks');
 
 class Messages {
   constructor() {
@@ -52,6 +53,9 @@ class Messages {
 const app = feathers();
 
 app.use('messages', new Messages());
+
+// we register our hooks directly on the service
+app.service('messages').hooks(messageHooks);
 
 // application hooks run for every service
 // They are useful for logging
