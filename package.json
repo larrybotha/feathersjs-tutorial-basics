@@ -5,7 +5,7 @@
     "Learning and annotations from https://docs.feathersjs.com/guides/basics/starting.html",
   "main": "index.js",
   "scripts": {
-    "api": "nodemon --inspect app",
+    "start": "nodemon --inspect app",
     "client": "http-server public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
