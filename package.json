@@ -1,8 +1,7 @@
 {
   "name": "feathersjs-tutorial-basics",
   "version": "1.0.0",
-  "description":
-    "Learning and annotations from https://docs.feathersjs.com/guides/basics/starting.html",
+  "description": "Learning and annotations from https://docs.feathersjs.com/guides/basics/starting.html",
   "main": "index.js",
   "scripts": {
     "start": "nodemon --inspect app",
@@ -21,6 +20,7 @@
   },
   "homepage": "https://github.com/larrybotha/feathersjs-tutorial-basics#readme",
   "dependencies": {
+    "@feathersjs/errors": "^3.3.0",
     "@feathersjs/feathers": "^3.1.3"
   }
 }
