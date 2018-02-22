@@ -1,5 +1,27 @@
+const express = require('@feathers/express');
 const feathers = require('@feathersjs/feathers');
 const messageHooks = require('./messages.hooks');
+
+// Without a 'transport' we don't actually have an API that can
+// be consumed. A transport is a plugin that turns feathers
+// into a server. Currently we can't make requests against our
+// messages service using curl or any other method.
+
+// Feathers has three transports:
+// HTTP REST via Express
+// Socket.io for websockets
+// Primus also for websockets
+
+// For a REST API servers has the following service methods:
+// find -> GET -> /messages
+// get -> GET -> /messages/1
+// create -> POST -> /messages
+// update -> PUT -> /messages/1
+// patch -> PATCH -> /messages/1
+// remove -> DELETE -> /messages/1
+
+// Feathers' REST transport maps the service methods to their
+// REST verb equivalents
 
 class Messages {
   constructor() {
@@ -50,19 +72,12 @@ class Messages {
   }
 }
 
-const app = feathers();
+// instead of initialising only a feathers app, we pass feathers into express
+const app = express(feathers());
 
 app.use('messages', new Messages());
 
-// we register our hooks directly on the service
 app.service('messages').hooks(messageHooks);
-
-// application hooks run for every service
-// They are useful for logging
-// application hooks run in a specific order:
-// before - before all service before hooks
-// after - after all service after hooks
-// error - after all service error hooks
 
 app.hooks({
   error: async context => {
