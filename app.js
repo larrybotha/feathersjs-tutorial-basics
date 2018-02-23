@@ -86,6 +86,11 @@ app.configure(express.rest());
 app.use('messages', new Messages());
 app.service('messages').hooks(messageHooks);
 
+// set up nicer error handling
+// This must always be the last line before starting the server. Because it's
+// a middleware... does it swallow errors and not propogate them? Or if there's
+// an error we want it last so that errors can't be thrown after it.
+app.use(express.errorHandler());
 
 
 
