@@ -92,5 +92,12 @@ app.service('messages').hooks(messageHooks);
 // an error we want it last so that errors can't be thrown after it.
 app.use(express.errorHandler());
 
+const server = app.listen(3030);
 
+app.service('messages').create({
+  text: 'Hello from the server',
+});
 
+server.on('listening', () => {
+  console.log('Feathers REST API start at http://localhost:3030');
+});
