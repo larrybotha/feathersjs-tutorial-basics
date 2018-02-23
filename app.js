@@ -1,4 +1,4 @@
-const express = require('@feathers/express');
+const express = require('@feathersjs/express');
 const feathers = require('@feathersjs/feathers');
 const messageHooks = require('./messages.hooks');
 
@@ -72,11 +72,18 @@ class Messages {
   }
 }
 
-// instead of initialising only a feathers app, we pass feathers into express
+// instead of initialising only a feathers app, we wrap feathers in express
 const app = express(feathers());
 
-app.use('messages', new Messages());
+// turn on JSON body parsing for REST services
+app.use(express.json());
+// turn on URL-encoded body parsing for REST services
+app.use(express.urlencoded({extended: true}));
+// configure REST transport using Express
+app.configure(express.rest());
 
+// set up the messages service
+app.use('messages', new Messages());
 app.service('messages').hooks(messageHooks);
 
 
