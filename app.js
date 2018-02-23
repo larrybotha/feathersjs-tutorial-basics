@@ -79,29 +79,6 @@ app.use('messages', new Messages());
 
 app.service('messages').hooks(messageHooks);
 
-app.hooks({
-  error: async context => {
-    console.error(
-      `Error in ${context.path} service method ${context.method}`,
-      context.error.stack
-    );
-  },
-});
 
-async function processMessages() {
-  const messagesSvc = app.service('messages');
 
-  messagesSvc.on('created', msg => console.log('created', msg));
-  messagesSvc.on('removed', msg => console.log('removed', msg));
 
-  await messagesSvc.create({text: 'First message'});
-  const lastMessage = await messagesSvc.create({text: 'Second message'});
-
-  await messagesSvc.remove(lastMessage.id);
-
-  const messageList = await messagesSvc.find();
-
-  console.log('available messages', messageList);
-}
-
-processMessages();
