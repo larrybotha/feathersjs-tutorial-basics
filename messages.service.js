@@ -1,50 +1,65 @@
-class Messages {
-  constructor() {
-    this.messages = [];
-    this.currentId = 0;
-  }
+const memory = require('feathers-memory');
 
-  async find(params) {
-    return this.messages;
-  }
+// using a database adapter we can reduce the manual work of implementing
+// the service methods to a few lines
+// class Messages {
+//   constructor() {
+//     this.messages = [];
+//     this.currentId = 0;
+//   }
 
-  async get(id, params) {
-    const message = this.messages.find(({id}) => id === parseInt(id, 10));
+//   async find(params) {
+//     return this.messages;
+//   }
 
-    if (!message) {
-      throw new Error(`Message with id ${id} not found`);
-    }
+//   async get(id, params) {
+//     const message = this.messages.find(({id}) => id === parseInt(id, 10));
 
-    return message;
-  }
+//     if (!message) {
+//       throw new Error(`Message with id ${id} not found`);
+//     }
 
-  async create(data, params) {
-    const message = Object.assign(
-      {
-        id: ++this.currentId,
-      },
-      data
-    );
+//     return message;
+//   }
 
-    this.messages = this.messages.concat(message);
+//   async create(data, params) {
+//     const message = Object.assign(
+//       {
+//         id: ++this.currentId,
+//       },
+//       data
+//     );
 
-    return message;
-  }
+//     this.messages = this.messages.concat(message);
 
-  async patch(id, data, params) {
-    const message = await this.get(id);
+//     return message;
+//   }
 
-    return Object.assign(message, data);
-  }
+//   async patch(id, data, params) {
+//     const message = await this.get(id);
 
-  async remove(id, params) {
-    const message = await this.get(id);
-    const index = this.messages.indexOf(message);
+//     return Object.assign(message, data);
+//   }
 
-    this.messages.splice(index, 1);
+//   async remove(id, params) {
+//     const message = await this.get(id);
+//     const index = this.messages.indexOf(message);
 
-    return message;
-  }
-}
+//     this.messages.splice(index, 1);
 
-module.exports = Messages;
+//     return message;
+//   }
+// }
+
+// This can now be queried:
+// curl localhost:3030/messages?$limit=2
+const messagesOptions = memory({
+  paginate: {
+    default: 10,
+    max: 25,
+  },
+});
+
+// Using hooks we can still modify how the service methods work
+
+module.exports = messagesOptions;
