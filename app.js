@@ -26,6 +26,20 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 // configure express to use REST as the protocol
 app.configure(express.rest());
+
+// configure socketio
+app.configure(socketio());
+
+// Channels determine which real-time events should be sent to which client.
+// e.g. sending messages to only authenticated clients, or sending messages
+// only to people in the same room.
+
+// add any client that connects to the 'everybody' channel
+app.on('connection', connection => app.channel('everybody').join(connection));
+
+// publish all events to the 'everybody' channel
+app.publish(() => app.channel('everybody'));
+
 app.use(
   'messages',
   memory({
