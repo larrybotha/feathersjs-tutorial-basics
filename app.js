@@ -20,6 +20,17 @@ const memory = require('feathers-memory');
 // create a feathers app
 const app = express(feathers());
 
+// allow CORS
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+
+  next();
+});
+
 // parse json requests
 app.use(express.json());
 // parse url queries with nested data
